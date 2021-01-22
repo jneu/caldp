@@ -1,0 +1,41 @@
+name: flake8 python lint checks
+
+on: push
+
+env:
+  CRDS_PATH: $HOME/crds_cache
+  CRDS_SERVER_URL: https://hst-crds.stsci.edu
+  CRDS_READONLY_CACHE: 0
+  iref: ${CRDS_PATH}/references/hst/wfc3/
+  jref: ${CRDS_PATH}/references/hst/acs/
+  oref: ${CRDS_PATH}/references/hst/stis/
+  lref: ${CRDS_PATH}/references/hst/cos/
+  nref: ${CRDS_PATH}/references/hst/nicmos/
+  uref: ${CRDS_PATH}/references/hst/wfcpc2/
+  uref_linux: $uref
+  DOCKER_REPO: alphasentaurii/caldp
+  DOCKER_TAG: latest
+  CAL_BASE_IMAGE: stsci/hst-pipeline:latest
+  CALDP_TEST_FILE_SIZE_THRESHOLD: 0.30
+
+jobs:
+  flake8:
+    name: run linter
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+
+      - name: set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6.10
+
+      - name: install dependencies
+        run: |
+          pip install flake8
+
+      - name: run flake8
+        run: |
+          flake8 --count --max-line-length=120 --exclude docs
