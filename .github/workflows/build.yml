@@ -37,28 +37,3 @@ jobs:
 
       - name: compute test coverage
         uses: codecov/codecov-action@v1
-
-  docker:
-    name: docker image build and single dataset
-    runs-on: ubuntu-18.04
-
-    strategy:
-      matrix:
-        HSTCAL: [stable, latest]
-
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v2
-
-      - name: set up environment
-        run: scripts/caldp-cal-env-github-actions ${{ matrix.HSTCAL }} >> $GITHUB_ENV
-
-      - name: build docker image
-        uses: docker/build-push-action@v2
-        with:
-          platforms: linux/amd64
-          push: false
-          tags: ${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}
-          build-args: CAL_BASE_IMAGE=${{ env.CAL_BASE_IMAGE }}
-# docker build -f Dockerfile  -t ${DOCKER_REPO}:${DOCKER_TAG}  --build-arg   .
-# docker run ${DOCKER_REPO}:${DOCKER_TAG}  caldp-process  j8cb010b0  astroquery:  none  caldp-config-offsite
