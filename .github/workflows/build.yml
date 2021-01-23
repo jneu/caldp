@@ -20,13 +20,16 @@ jobs:
         with:
           python-version: 3.6.10
 
+      - name: install dependencies
+        run: pip install coverage
+
       - name: checkout code
         uses: actions/checkout@v2
 
       - name: set up environment 1
         run: |
           echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$HOME/miniconda3/envs/caldp_stable/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$HOME/miniconda3/envs/caldp_stable/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: set up environment 2
         run: |
@@ -54,8 +57,10 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
 
 
-
-
+#
+#
+# fix code coverage!
+#
 #    - name: Pytest native functional tests LATEST
 #      env:
 #        - HSTCAL=latest
@@ -68,3 +73,4 @@ jobs:
 #        - pytest caldp --cov=caldp  --cov-fail-under 77  --capture=tee-sys
 #      after_success:
 #        - bash <(curl -s https://codecov.io/bash)
+#
