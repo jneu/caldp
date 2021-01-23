@@ -22,7 +22,8 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           push: false
-          tags: ${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}
+          repository: ${{ env.DOCKER_REPO }}
+          tags: ${{ env.DOCKER_TAG }}
           build_args: CAL_BASE_IMAGE=${{ env.CAL_BASE_IMAGE }}
 # docker build -f Dockerfile  -t ${DOCKER_REPO}:${DOCKER_TAG}  --build-arg   .
 # docker run ${DOCKER_REPO}:${DOCKER_TAG}  caldp-process  j8cb010b0  astroquery:  none  caldp-config-offsite
