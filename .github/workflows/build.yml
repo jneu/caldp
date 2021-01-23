@@ -2,22 +2,6 @@ name: build and test
 
 on: push
 
-env:
-  CRDS_PATH: ${{ env.HOME }}/crds_cache
-  CRDS_SERVER_URL: https://hst-crds.stsci.edu
-  CRDS_READONLY_CACHE: 0
-  iref: ${{ env.CRDS_PATH }}/references/hst/wfc3/
-  jref: ${{ env.CRDS_PATH }}/references/hst/acs/
-  oref: ${{ env.CRDS_PATH }}/references/hst/stis/
-  lref: ${{ env.CRDS_PATH }}/references/hst/cos/
-  nref: ${{ env.CRDS_PATH }}/references/hst/nicmos/
-  uref: ${{ env.CRDS_PATH }}/references/hst/wfcpc2/
-  uref_linux: ${{ env.uref }}
-  DOCKER_REPO: alphasentaurii/caldp
-  DOCKER_TAG: latest
-  CAL_BASE_IMAGE: stsci/hst-pipeline:latest
-  CALDP_TEST_FILE_SIZE_THRESHOLD: 0.30
-
 jobs:
   build:
     name: build
