@@ -32,7 +32,7 @@ jobs:
       - name: set up environment
         run: |
           echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$HOME/miniconda3/envs/caldp_${{ matrix.HSTCAL }}/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/miniconda3/envs/caldp_${{ matrix.HSTCAL }}/lib" >> $GITHUB_ENV
 
       - name: install
         run: |
@@ -47,7 +47,7 @@ jobs:
           pytest caldp --cov=caldp --cov-fail-under 77  --capture=tee-sys
 
       - name: compute test coverage
-        run: bash <(curl -s https://codecov.io/bash)
+        uses: codecov/codecov-action@v1
 
   # latest:
   #   name: LATEST pytest native functional tests
