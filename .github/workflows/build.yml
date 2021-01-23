@@ -29,19 +29,19 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      - name: set up environment 1
+      - name: set up environment
         run: |
           echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$HOME/miniconda3/envs/caldp_${{ matrix.HSTCAL }}/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-      - name: set up environment 2
-        run: source scripts/caldp-cal-env
-
       - name: install
-        run: scripts/caldp-install-all ${{ matrix.HSTCAL }}
+        run: |
+          source scripts/caldp-cal-env
+          scripts/caldp-install-all ${{ matrix.HSTCAL }}
 
       - name: run pytest
         run: |
+          source scripts/caldp-cal-env
           source "$HOME/miniconda3/etc/profile.d/conda.sh"
           conda activate caldp_${{ matrix.HSTCAL }}
           pytest caldp --cov=caldp --cov-fail-under 77  --capture=tee-sys
