@@ -20,22 +20,28 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: set up the environment
+      - name: set up the environment 1
         run: |
           echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
           echo "CRDS_SERVER_URL=https://hst-crds.stsci.edu" >> $GITHUB_ENV
           echo "CRDS_READONLY_CACHE=0" >> $GITHUB_ENV
+          echo "DOCKER_REPO=alphasentaurii/caldp" >> $GITHUB_ENV
+          echo "DOCKER_TAG=latest" >> $GITHUB_ENV
+          echo "CAL_BASE_IMAGE=stsci/hst-pipeline:latest" >> $GITHUB_ENV
+          echo "CALDP_TEST_FILE_SIZE_THRESHOLD=0.30" >> $GITHUB_ENV
+
+      - name: set up the environment 2
+        run: |
           echo "iref=$CRDS_PATH/references/hst/wfc3/" >> $GITHUB_ENV
           echo "jref=$CRDS_PATH/references/hst/acs/" >> $GITHUB_ENV
           echo "oref=$CRDS_PATH/references/hst/stis/" >> $GITHUB_ENV
           echo "lref=$CRDS_PATH/references/hst/cos/" >> $GITHUB_ENV
           echo "nref=$CRDS_PATH/references/hst/nicmos/" >> $GITHUB_ENV
           echo "uref=$CRDS_PATH/references/hst/wfcpc2/" >> $GITHUB_ENV
+
+      - name: set up the environment 3
+        run: |
           echo "uref_linux=$uref" >> $GITHUB_ENV
-          echo "DOCKER_REPO=alphasentaurii/caldp" >> $GITHUB_ENV
-          echo "DOCKER_TAG=latest" >> $GITHUB_ENV
-          echo "CAL_BASE_IMAGE=stsci/hst-pipeline:latest" >> $GITHUB_ENV
-          echo "CALDP_TEST_FILE_SIZE_THRESHOLD=0.30" >> $GITHUB_ENV
 
       - name: print environment
         run: |
