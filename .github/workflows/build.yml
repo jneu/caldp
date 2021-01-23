@@ -17,6 +17,9 @@ jobs:
         with:
           python-version: 3.6.10
 
+      - name: install dependencies
+        run: pip install coverage
+
       - name: checkout code
         uses: actions/checkout@v2
 
@@ -35,15 +38,9 @@ jobs:
       - name: compute test coverage
         uses: codecov/codecov-action@v1
 
-#      CAL_BASE_IMAGE: stsci/hst-pipeline:latest
-#        - DOCKER_REPO=alphasentaurii/caldp
-#        - DOCKER_TAG=latest
- #   - name: Docker image build and single dataset
-  ##   before_install:
-        # - docker pull $DOCKER_REPO:$DOCKER_TAG
+
+
     #    - docker build -f Dockerfile  -t ${DOCKER_REPO}:${DOCKER_TAG}  --build-arg CAL_BASE_IMAGE=${CAL_BASE_IMAGE}  .
-     # script:
+
       #  - "docker run ${DOCKER_REPO}:${DOCKER_TAG}  caldp-process  j8cb010b0  astroquery:  none  caldp-config-offsite"
-   #   after_success:
-    #    - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
-     #   - docker push ${DOCKER_REPO}:${DOCKER_TAG}
+
