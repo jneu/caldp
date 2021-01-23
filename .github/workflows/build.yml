@@ -3,12 +3,16 @@ name: build and test
 on: push
 
 jobs:
-  stable:
-    name: STABLE pytest native functional tests
+  pytest:
+    name: pytest native functional tests
     runs-on: ubuntu-18.04
 
+    strategy:
+      matrix:
+        HSTCAL: [stable]
+
     env:
-      HSTCAL: stable
+      HSTCAL: ${{ matrix.HSTCAL }}
       CRDS_SERVER_URL: https://hst-crds.stsci.edu
       CRDS_READONLY_CACHE: 0
       CALDP_TEST_FILE_SIZE_THRESHOLD: 0.30
@@ -28,18 +32,18 @@ jobs:
       - name: set up environment 1
         run: |
           echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/miniconda3/envs/caldp_stable/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$HOME/miniconda3/envs/caldp_${{ matrix.HSTCAL }}/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: set up environment 2
         run: source scripts/caldp-cal-env
 
       - name: install
-        run: scripts/caldp-install-all stable
+        run: scripts/caldp-install-all ${{ matrix.HSTCAL }}
 
       - name: run pytest
         run: |
           source "$HOME/miniconda3/etc/profile.d/conda.sh"
-          conda activate caldp_stable
+          conda activate caldp_${{ matrix.HSTCAL }}
           pytest caldp --cov=caldp --cov-fail-under 77  --capture=tee-sys
 
       - name: compute test coverage
