@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -o nounset
+
+# HSTCAL should be 'stable' or 'latest'
+HSTCAL=$1
+
+CRDS_SERVER_URL=https://hst-crds.stsci.edu
+CRDS_READONLY_CACHE=0
+CALDP_TEST_FILE_SIZE_THRESHOLD=0.30
+CRDS_PATH=$HOME/crds_cache
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$HOME/miniconda3/envs/caldp_$HSTCAL/lib
+iref=$CRDS_PATH/references/hst/wfc3/
+jref=$CRDS_PATH/references/hst/acs/
+oref=$CRDS_PATH/references/hst/stis/
+lref=$CRDS_PATH/references/hst/cos/
+nref=$CRDS_PATH/references/hst/nicmos/
+uref=$CRDS_PATH/references/hst/wfcpc2/
+uref_linux=$uref
+
+for e in \
+    HSTCAL \
+    CRDS_SERVER_URL \
+    CRDS_READONLY_CACHE \
+    CALDP_TEST_FILE_SIZE_THRESHOLD \
+    CRDS_PATH \
+    LD_LIBRARY_PATH \
+    iref jref oref lref nref uref \
+    uref_linux
+do
+    echo $e=${!e}
+done

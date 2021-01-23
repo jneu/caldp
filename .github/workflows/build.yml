@@ -9,13 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        HSTCAL: [stable]
-
-    env:
-      HSTCAL: ${{ matrix.HSTCAL }}
-      CRDS_SERVER_URL: https://hst-crds.stsci.edu
-      CRDS_READONLY_CACHE: 0
-      CALDP_TEST_FILE_SIZE_THRESHOLD: 0.30
+        HSTCAL: [stable, latest]
 
     steps:
       - name: set up python 3.6.10
@@ -23,74 +17,23 @@ jobs:
         with:
           python-version: 3.6.10
 
-      - name: install dependencies
-        run: pip install coverage
-
       - name: checkout code
         uses: actions/checkout@v2
 
       - name: set up environment
-        run: |
-          echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/miniconda3/envs/caldp_${{ matrix.HSTCAL }}/lib" >> $GITHUB_ENV
+        run: scripts/caldp-cal-env-github-actions ${{ matrix.HSTCAL }} >> $GITHUB_ENV
 
       - name: install
-        run: |
-          source scripts/caldp-cal-env
-          scripts/caldp-install-all ${{ matrix.HSTCAL }}
+        run: scripts/caldp-install-all ${{ matrix.HSTCAL }}
 
       - name: run pytest
         run: |
-          source scripts/caldp-cal-env
           source "$HOME/miniconda3/etc/profile.d/conda.sh"
           conda activate caldp_${{ matrix.HSTCAL }}
           pytest caldp --cov=caldp --cov-fail-under 77  --capture=tee-sys
 
       - name: compute test coverage
         uses: codecov/codecov-action@v1
-
-  # latest:
-  #   name: LATEST pytest native functional tests
-  #   runs-on: ubuntu-18.04
-
-  #   env:
-  #     HSTCAL: latest
-  #     CRDS_SERVER_URL: https://hst-crds.stsci.edu
-  #     CRDS_READONLY_CACHE: 0
-  #     CALDP_TEST_FILE_SIZE_THRESHOLD: 0.30
-
-  #   steps:
-  #     - name: set up python 3.6.10
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.6.10
-
-  #     - name: install dependencies
-  #       run: pip install coverage
-
-  #     - name: checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: set up environment 1
-  #       run: |
-  #         echo "CRDS_PATH=$HOME/crds_cache" >> $GITHUB_ENV
-  #         echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/miniconda3/envs/caldp_latest/lib" >> $GITHUB_ENV
-
-  #     - name: set up environment 2
-  #       run: source scripts/caldp-cal-env
-
-  #     - name: install
-  #       run: scripts/caldp-install-all latest
-
-  #     - name: run pytest
-  #       run: |
-  #         source "$HOME/miniconda3/etc/profile.d/conda.sh"
-  #         conda activate caldp_latest
-  #         pytest caldp --cov=caldp --cov-fail-under 77  --capture=tee-sys
-
-  #     - name: compute test coverage
-  #       run: bash <(curl -s https://codecov.io/bash)
-
 
 #      CAL_BASE_IMAGE: stsci/hst-pipeline:latest
 #        - DOCKER_REPO=alphasentaurii/caldp
