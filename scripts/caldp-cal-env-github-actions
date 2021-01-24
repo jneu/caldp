@@ -34,7 +34,7 @@ uref_linux=$uref
 
 CAL_BASE_IMAGE=stsci/hst-pipeline:$HSTCAL
 DOCKER_REPO=alphasentaurii/caldp
-DOCKER_TAG=latest
+DOCKER_TAG=$HSTCAL
 
 for e in \
     HSTCAL \
